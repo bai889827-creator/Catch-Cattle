@@ -26,32 +26,59 @@
         body {
             min-height: 100vh;
             margin: 0;
-            padding: 32px 18px;
+            padding: 16px;
             color: var(--text);
             font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+            display: grid;
+            place-items: center;
             background:
                 radial-gradient(circle at top left, rgba(241, 184, 75, 0.2), transparent 34%),
                 linear-gradient(135deg, #eef3f0 0%, #f8fbf5 52%, #e5f1ed 100%);
         }
 
         .app {
-            width: min(960px, 100%);
+            width: min(1600px, calc(100vw - 32px));
             margin: 0 auto;
+        }
+
+        .stage {
+            display: grid;
+            grid-template-rows: auto minmax(0, 1fr);
+            gap: 16px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.82);
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.72);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(14px);
+            aspect-ratio: 16 / 9;
+            min-height: calc(100vh - 36px);
         }
 
         .hero {
             display: flex;
-            align-items: flex-end;
+            align-items: center;
             justify-content: space-between;
             gap: 18px;
-            margin-bottom: 18px;
+            padding: 4px 6px 0;
         }
 
         h1 {
             margin: 0;
-            font-size: clamp(28px, 5vw, 46px);
+            font-size: clamp(28px, 4vw, 44px);
             line-height: 1.1;
             letter-spacing: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand-cow {
+            width: 42px;
+            height: 42px;
+            flex: 0 0 auto;
+            object-fit: contain;
         }
 
         .subtitle {
@@ -62,7 +89,7 @@
 
         .badge {
             flex: 0 0 auto;
-            padding: 9px 14px;
+            padding: 10px 14px;
             border: 1px solid rgba(47, 143, 99, 0.24);
             border-radius: 999px;
             color: var(--accent-dark);
@@ -72,35 +99,90 @@
         }
 
         .tool {
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.86);
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(14px);
+            display: grid;
+            grid-template-rows: auto minmax(0, 1fr);
+            gap: 16px;
+            min-height: 0;
         }
 
-        .top-panel {
+        .sidebar,
+        .main-panels {
             display: grid;
-            grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.75fr);
-            gap: 0;
-            border-bottom: 1px solid var(--line);
+            gap: 16px;
+            min-height: 0;
+        }
+
+        .sidebar {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            align-items: stretch;
+        }
+
+        .main-panels {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            align-items: start;
+        }
+
+        .panel {
+            display: grid;
+            gap: 14px;
+            min-height: 0;
+            padding: 16px;
+            border: 1px solid rgba(220, 229, 223, 0.9);
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(250, 253, 251, 0.95));
+            box-shadow: 0 12px 28px rgba(21, 49, 35, 0.08);
+        }
+
+        .input-panel {
+            grid-template-rows: auto minmax(120px, 1fr);
+            min-height: 220px;
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .panel-title {
+            color: var(--text);
+            font-size: 15px;
+            font-weight: 900;
+        }
+
+        .panel-note {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .panel-tag {
+            flex: 0 0 auto;
+            padding: 6px 10px;
+            border: 1px solid rgba(47, 143, 99, 0.18);
+            border-radius: 999px;
+            color: var(--accent-dark);
+            background: rgba(227, 244, 236, 0.72);
+            font-size: 12px;
+            font-weight: 800;
         }
 
         .upload-area {
-            min-height: 238px;
+            min-height: 0;
             display: grid;
             place-items: center;
-            padding: 28px;
-            border: 0;
-            border-right: 1px solid var(--line);
+            padding: 20px;
+            border: 1px dashed #bfd0c5;
+            border-radius: 14px;
             color: var(--muted);
             text-align: center;
             cursor: pointer;
             background:
                 linear-gradient(135deg, rgba(47, 143, 99, 0.08), rgba(241, 184, 75, 0.08)),
                 var(--surface-soft);
-            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .upload-area:hover,
@@ -109,45 +191,42 @@
             background:
                 linear-gradient(135deg, rgba(47, 143, 99, 0.16), rgba(241, 184, 75, 0.14)),
                 #fbfdfb;
+            box-shadow: 0 0 0 4px rgba(47, 143, 99, 0.06);
         }
 
         .upload-mark {
-            width: 72px;
-            height: 72px;
+            width: 62px;
+            height: 62px;
             display: grid;
             place-items: center;
             margin: 0 auto 14px;
-            border-radius: 22px;
+            border-radius: 18px;
             background: var(--surface);
             box-shadow: 0 12px 28px rgba(47, 143, 99, 0.14);
-            font-size: 34px;
+            font-size: 30px;
         }
 
         .upload-title {
             margin: 0;
             color: var(--text);
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
         }
 
         .upload-hint {
             margin: 8px 0 0;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .paste-panel {
-            display: grid;
-            gap: 14px;
-            padding: 18px 28px 28px;
-            border-top: 1px solid var(--line);
-            background: linear-gradient(135deg, rgba(47, 143, 99, 0.04), rgba(241, 184, 75, 0.05));
+            padding: 16px;
         }
 
         .paste-area {
             display: grid;
             place-items: center;
-            min-height: 132px;
-            padding: 20px;
+            min-height: 0;
+            padding: 18px;
             border: 1px dashed #b9cabf;
             border-radius: 14px;
             color: var(--muted);
@@ -168,23 +247,23 @@
         }
 
         .paste-mark {
-            width: 60px;
-            height: 60px;
+            width: 54px;
+            height: 54px;
             display: grid;
             place-items: center;
             margin: 0 auto 12px;
-            border-radius: 18px;
+            border-radius: 16px;
             background: var(--surface-soft);
             color: var(--accent-dark);
             box-shadow: 0 10px 24px rgba(47, 143, 99, 0.12);
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 900;
         }
 
         .paste-title {
             margin: 0;
             color: var(--text);
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
         }
 
@@ -197,9 +276,10 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 16px;
-            padding: 28px;
-            background: var(--surface);
+            gap: 14px;
+            min-height: 0;
+            padding: 0;
+            background: transparent;
         }
 
         .number-row {
@@ -260,7 +340,7 @@
         }
 
         .log {
-            min-height: 44px;
+            min-height: 48px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -285,15 +365,14 @@
 
         .content {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(280px, auto);
-            gap: 22px;
-            padding: 24px;
+            gap: 16px;
             align-items: start;
         }
 
         .preview,
         .result {
             min-width: 0;
+            min-height: 0;
         }
 
         .section-title {
@@ -308,18 +387,52 @@
             text-transform: uppercase;
         }
 
-        canvas {
-            width: 100%;
-            max-width: 100%;
-            display: none;
+        .panel-body {
+            display: grid;
+            gap: 12px;
+            min-height: 0;
+        }
+
+        .preview-panel,
+        .result-panel {
+            grid-template-rows: auto minmax(0, 1fr);
+        }
+
+        .square-frame {
+            display: grid;
+            place-items: center;
+            width: min(100%, 58vh);
+            aspect-ratio: 1 / 1;
+            justify-self: center;
+            overflow: hidden;
             border: 1px solid var(--line);
-            border-radius: 12px;
+            border-radius: 16px;
+            background:
+                linear-gradient(135deg, rgba(47, 143, 99, 0.05), rgba(241, 184, 75, 0.05)),
+                var(--surface-soft);
+        }
+
+        .preview-frame {
+            width: min(100%, 58vh);
+        }
+
+        canvas {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
             background: #f7f7f2;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.75);
+        }
+
+        .result-frame {
+            padding: 12px;
         }
 
         .empty-state {
-            min-height: 184px;
+            min-height: 0;
+            width: 100%;
+            height: 100%;
             display: grid;
             place-items: center;
             padding: 24px;
@@ -335,8 +448,9 @@
             display: grid;
             width: max-content;
             max-width: 100%;
+            max-height: 100%;
             overflow: auto;
-            gap: 3px;
+            gap: var(--grid-gap, 3px);
             padding: 6px;
             border: 1px solid var(--line);
             border-radius: 14px;
@@ -349,15 +463,14 @@
         }
 
         .cell {
-            width: 36px;
-            height: 36px;
+            width: var(--cell-size, 36px);
+            height: var(--cell-size, 36px);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             border-radius: 8px;
             background: white;
-            font-size: 21px;
             box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
         }
 
@@ -365,12 +478,21 @@
             position: absolute;
             display: grid;
             place-items: center;
-            width: 30px;
-            height: 30px;
+            width: calc(var(--cell-size, 36px) * 0.82);
+            height: calc(var(--cell-size, 36px) * 0.82);
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.72);
             animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.22));
+            overflow: hidden;
+        }
+
+        .cow-icon {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            user-select: none;
         }
 
         @keyframes pop {
@@ -384,7 +506,7 @@
 
         @media (max-width: 760px) {
             body {
-                padding: 18px 12px;
+                padding: 12px;
             }
 
             .hero {
@@ -392,19 +514,45 @@
                 flex-direction: column;
             }
 
-            .top-panel,
-            .content {
-                grid-template-columns: 1fr;
+            .stage {
+                aspect-ratio: auto;
+                min-height: auto;
             }
 
-            .upload-area {
-                min-height: 198px;
-                border-right: 0;
-                border-bottom: 1px solid var(--line);
+            .tool {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto;
+            }
+
+            .sidebar {
+                grid-template-columns: 1fr;
             }
 
             .number-row {
                 grid-template-columns: 1fr 1fr;
+            }
+
+            .main-panels {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 1180px) {
+            .stage {
+                aspect-ratio: auto;
+                min-height: auto;
+            }
+
+            .tool {
+                grid-template-rows: auto auto;
+            }
+
+            .sidebar {
+                grid-template-columns: 1fr;
+            }
+
+            .main-panels {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -412,62 +560,109 @@
 <body>
 
 <main class="app">
-    <header class="hero">
-        <div>
-            <h1>🐮 小牛逻辑拼图自动求解器</h1>
-            <p class="subtitle">上传网格截图，核对行列数，然后一键标出小牛位置。</p>
-        </div>
-        <div class="badge">智能识别 · 本地计算</div>
-    </header>
-
-    <section class="tool" aria-label="小牛逻辑拼图求解器">
-        <div class="top-panel">
-            <div class="upload-area" id="uploadArea" onclick="document.getElementById('upload').click()">
-                <div>
-                    <div class="upload-mark">＋</div>
-                    <p class="upload-title">点击或拖拽上传游戏截图</p>
-                    <p class="upload-hint">建议只截取棋盘区域，文件上传和粘贴截图是分开的。</p>
-                    <input type="file" id="upload" accept="image/*" style="display:none">
-                </div>
+    <section class="stage">
+        <header class="hero">
+            <div>
+                <h1><img class="brand-cow" src="cow-icon.jpg" onerror="this.onerror=null;this.src='https://openmoji.org/php/download_asset.php?emoji_hexcode=1F42E&emoji_variant=color&type=emoji'" alt="">小牛逻辑拼图自动求解器</h1>
+                <p class="subtitle">上传、粘贴、识别、求解，全部在一个宽屏工作台里完成。</p>
             </div>
+            <div class="badge">智能识别 · 本地计算</div>
+        </header>
 
-            <div class="controls">
-                <div class="number-row">
-                    <label>行数
-                        <input type="number" id="rows" value="10" min="1">
-                    </label>
-                    <label>列数
-                        <input type="number" id="cols" value="10" min="1">
-                    </label>
-                </div>
-                <button onclick="autoDetectAndSolve()">一键识别并求解</button>
-                <div id="status" class="log">准备就绪。支持任意行列图片识别。</div>
-            </div>
-        </div>
+        <section class="tool" aria-label="小牛逻辑拼图求解器">
+            <aside class="sidebar">
+                <section class="panel input-panel">
+                    <div class="panel-head">
+                        <div>
+                            <div class="panel-note">输入 01</div>
+                            <div class="panel-title">文件上传</div>
+                        </div>
+                        <div class="panel-tag">拖拽 / 选择</div>
+                    </div>
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('upload').click()">
+                        <div>
+                            <div class="upload-mark">＋</div>
+                            <p class="upload-title">点击或拖拽上传游戏截图</p>
+                            <p class="upload-hint">建议只截取棋盘区域，文件上传和粘贴截图是分开的。</p>
+                            <input type="file" id="upload" accept="image/*" style="display:none">
+                        </div>
+                    </div>
+                </section>
 
-        <div class="paste-panel">
-            <div class="paste-area" id="pasteArea" tabindex="0" role="button" aria-label="粘贴截图区域">
-                <div>
-                    <div class="paste-mark">V</div>
-                    <p class="paste-title">粘贴截图</p>
-                    <p class="paste-hint">先点击这里，再按 Ctrl+V。这里不会影响文件上传入口。</p>
-                </div>
-            </div>
-        </div>
+                <section class="panel input-panel paste-panel">
+                    <div class="panel-head">
+                        <div>
+                            <div class="panel-note">输入 02</div>
+                            <div class="panel-title">粘贴截图</div>
+                        </div>
+                        <div class="panel-tag">Ctrl + V</div>
+                    </div>
+                    <div class="paste-area" id="pasteArea" tabindex="0" role="button" aria-label="粘贴截图区域">
+                        <div>
+                            <div class="paste-mark">V</div>
+                            <p class="paste-title">先点这里，再粘贴</p>
+                            <p class="paste-hint">这个入口只接收剪贴板里的图片，不会影响文件上传。</p>
+                        </div>
+                    </div>
+                </section>
 
-        <div class="content">
-            <div class="preview">
-                <div class="section-title">截图预览</div>
-                <canvas id="canvas"></canvas>
-                <div id="preview-empty" class="empty-state">上传图片后会在这里显示预览。</div>
-            </div>
+                <section class="panel input-panel">
+                    <div class="panel-head">
+                        <div>
+                            <div class="panel-note">输入 03</div>
+                            <div class="panel-title">识别设置</div>
+                        </div>
+                        <div class="panel-tag">自动识别</div>
+                    </div>
+                    <div class="controls">
+                        <div class="number-row">
+                            <label>行数
+                                <input type="number" id="rows" value="10" min="1">
+                            </label>
+                            <label>列数
+                                <input type="number" id="cols" value="10" min="1">
+                            </label>
+                        </div>
+                        <button onclick="autoDetectAndSolve()">一键识别并求解</button>
+                        <div id="status" class="log">准备就绪。支持任意行列图片识别。</div>
+                    </div>
+                </section>
+            </aside>
 
-            <div class="result">
-                <div class="section-title">求解结果</div>
-                <div id="result-empty" class="empty-state">求解成功后会在这里生成棋盘。</div>
-                <div id="result-grid" class="grid-container"></div>
+            <div class="main-panels">
+                <section class="panel preview-panel preview">
+                    <div class="panel-head">
+                        <div>
+                            <div class="panel-note">查看 01</div>
+                            <div class="panel-title">截图预览</div>
+                        </div>
+                        <div class="panel-tag">本地读取</div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="square-frame preview-frame">
+                            <canvas id="canvas"></canvas>
+                            <div id="preview-empty" class="empty-state">上传图片后会在这里显示预览。</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel result-panel result">
+                    <div class="panel-head">
+                        <div>
+                            <div class="panel-note">查看 02</div>
+                            <div class="panel-title">求解结果</div>
+                        </div>
+                        <div class="panel-tag">推荐位置</div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="square-frame result-frame">
+                            <div id="result-empty" class="empty-state">求解成功后会在这里生成棋盘。</div>
+                            <div id="result-grid" class="grid-container"></div>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </div>
+        </section>
     </section>
 </main>
 
@@ -479,6 +674,8 @@
     const previewEmpty = document.getElementById('preview-empty');
     const resultEmpty = document.getElementById('result-empty');
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const cowIconSrc = 'cow-icon.jpg';
+    const cowIconFallback = 'https://openmoji.org/php/download_asset.php?emoji_hexcode=1F42E&emoji_variant=color&type=emoji';
 
     upload.onchange = (e) => {
         const file = e.target.files[0];
@@ -852,8 +1049,16 @@
 
     function renderResult(rows, cols, grid, solution, palette) {
         const container = document.getElementById('result-grid');
+        const resultFrame = document.querySelector('.result-frame');
+        const frameSize = Math.min(resultFrame.clientWidth, resultFrame.clientHeight) - 26;
+        const gap = Math.max(3, Math.min(8, Math.floor(frameSize / 90)));
+        const maxAxisCells = Math.max(rows, cols);
+        const cellSize = Math.max(28, Math.floor((frameSize - 12 - gap * (maxAxisCells - 1)) / maxAxisCells));
+
         container.innerHTML = '';
-        container.style.gridTemplateColumns = `repeat(${cols}, 36px)`;
+        container.style.setProperty('--cell-size', `${cellSize}px`);
+        container.style.setProperty('--grid-gap', `${gap}px`);
+        container.style.gridTemplateColumns = `repeat(${cols}, var(--cell-size))`;
         resultEmpty.style.display = 'none';
 
         for (let r = 0; r < rows; r++) {
@@ -861,7 +1066,9 @@
                 const cell = document.createElement('div');
                 cell.className = 'cell';
                 cell.style.backgroundColor = `rgb(${palette[grid[r][c]]})`;
-                if (solution[r] === c) cell.innerHTML = '<span class="cow">🐮</span>';
+                if (solution[r] === c) {
+                    cell.innerHTML = `<span class="cow"><img class="cow-icon" src="${cowIconSrc}" onerror="this.onerror=null;this.src='${cowIconFallback}'" alt=""></span>`;
+                }
                 container.appendChild(cell);
             }
         }
