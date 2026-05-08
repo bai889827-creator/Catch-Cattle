@@ -135,6 +135,64 @@
             font-size: 14px;
         }
 
+        .paste-panel {
+            display: grid;
+            gap: 14px;
+            padding: 18px 28px 28px;
+            border-top: 1px solid var(--line);
+            background: linear-gradient(135deg, rgba(47, 143, 99, 0.04), rgba(241, 184, 75, 0.05));
+        }
+
+        .paste-area {
+            display: grid;
+            place-items: center;
+            min-height: 132px;
+            padding: 20px;
+            border: 1px dashed #b9cabf;
+            border-radius: 14px;
+            color: var(--muted);
+            text-align: center;
+            cursor: text;
+            background: rgba(255, 255, 255, 0.72);
+            transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+            outline: none;
+        }
+
+        .paste-area:hover,
+        .paste-area:focus,
+        .paste-area.active {
+            border-color: rgba(47, 143, 99, 0.5);
+            color: var(--accent-dark);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(47, 143, 99, 0.08);
+        }
+
+        .paste-mark {
+            width: 60px;
+            height: 60px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 12px;
+            border-radius: 18px;
+            background: var(--surface-soft);
+            color: var(--accent-dark);
+            box-shadow: 0 10px 24px rgba(47, 143, 99, 0.12);
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .paste-title {
+            margin: 0;
+            color: var(--text);
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .paste-hint {
+            margin: 8px 0 0;
+            font-size: 13px;
+        }
+
         .controls {
             display: flex;
             flex-direction: column;
@@ -368,7 +426,7 @@
                 <div>
                     <div class="upload-mark">＋</div>
                     <p class="upload-title">点击或拖拽上传游戏截图</p>
-                    <p class="upload-hint">建议只截取棋盘区域，识别会更稳定。</p>
+                    <p class="upload-hint">建议只截取棋盘区域，文件上传和粘贴截图是分开的。</p>
                     <input type="file" id="upload" accept="image/*" style="display:none">
                 </div>
             </div>
@@ -384,6 +442,16 @@
                 </div>
                 <button onclick="autoDetectAndSolve()">一键识别并求解</button>
                 <div id="status" class="log">准备就绪。支持任意行列图片识别。</div>
+            </div>
+        </div>
+
+        <div class="paste-panel">
+            <div class="paste-area" id="pasteArea" tabindex="0" role="button" aria-label="粘贴截图区域">
+                <div>
+                    <div class="paste-mark">V</div>
+                    <p class="paste-title">粘贴截图</p>
+                    <p class="paste-hint">先点击这里，再按 Ctrl+V。这里不会影响文件上传入口。</p>
+                </div>
             </div>
         </div>
 
@@ -406,6 +474,7 @@
 <script>
     const upload = document.getElementById('upload');
     const uploadArea = document.getElementById('uploadArea');
+    const pasteArea = document.getElementById('pasteArea');
     const canvas = document.getElementById('canvas');
     const previewEmpty = document.getElementById('preview-empty');
     const resultEmpty = document.getElementById('result-empty');
@@ -431,11 +500,40 @@
         uploadArea.classList.remove('dragging');
         const file = event.dataTransfer.files[0];
         if (file && file.type.startsWith('image/')) {
-            loadImageFile(file);
+            loadImageFile(file, 'upload');
         }
     });
 
-    function loadImageFile(file) {
+    pasteArea.addEventListener('click', () => {
+        pasteArea.focus();
+    });
+
+    pasteArea.addEventListener('focus', () => {
+        pasteArea.classList.add('active');
+    });
+
+    pasteArea.addEventListener('blur', () => {
+        pasteArea.classList.remove('active');
+    });
+
+    pasteArea.addEventListener('paste', (event) => {
+        const clipboardData = event.clipboardData;
+        if (!clipboardData) return;
+
+        const imageFile = Array.from(clipboardData.items || [])
+            .map(item => item.kind === 'file' ? item.getAsFile() : null)
+            .find(file => file && file.type.startsWith('image/'));
+
+        event.preventDefault();
+        if (imageFile) {
+            loadImageFile(imageFile, 'paste');
+            return;
+        }
+
+        document.getElementById('status').innerText = "粘贴截图区域里没有检测到图片，请重新复制截图后再试。";
+    });
+
+    function loadImageFile(file, source = 'upload') {
         const reader = new FileReader();
         reader.onload = (event) => {
             const img = new Image();
@@ -447,7 +545,10 @@
                 previewEmpty.style.display = 'none';
                 resultEmpty.style.display = 'grid';
                 document.getElementById('result-grid').innerHTML = '';
-                document.getElementById('status').innerText = "图片已加载，点击按钮开始自动识别。";
+                document.getElementById('status').innerText =
+                    source === 'paste'
+                        ? "粘贴截图已加载，点击按钮开始自动识别。"
+                        : "图片已加载，点击按钮开始自动识别。";
 
                 // 自动执行一次检测逻辑
                 detectGridSize();
